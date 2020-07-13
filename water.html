@@ -5,23 +5,52 @@
     
     
     
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ned Kelly Experiment</title>
-    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.0/dist/aframe-extras.min.js"></script>
-    <script src="js/aframe-rain.min.js"></script>
-<!--    <script src="js\aframe-extra-min.js"></script>-->
-    
-<!--      <script src="https://rawgit.com/takahirox/aframe-rain/master/build/aframe-rain.min.js"></script>-->
-    
-    <script src="js\custom.js"></script>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ned Kelly Experiment</title>
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.0/dist/aframe-extras.min.js"></script>
+        <script src="js/aframe-rain.min.js"></script>
+        <script src="js/custom.js"></script>
     </head>
-
+    
     <body>
-        <progress max=100 min=0 value=45></progress>
+        <a-scene stats nedkelly-logic rain fog = "type: exponential; color: #586247; density: 0.1w" renderer="alpha: false;">
             
+            <!-- Asset management system. -->
+            <a-assets>
+                <a-asset-item id="nedkelly-gtlf" src="models/nedKelly.glb" response-type="arraybuffer"></a-asset-item>
+                <a-asset-item id="environment" src="models/environment.glb" response-type="arraybuffer"></a-asset-item>
+                <!-- <img id="sky" src="img/autumn_forest_03_1k.png"> -->
+            </a-assets>
+            
+            <!-- Camera Settings. -->            
+            <a-entity position="0 -1 5.9">
+                <a-camera user-height=2.6></a-camera> 
+            </a-entity>
+            
+            <a-sky color="#ECECEC"></a-sky>
+            
+   
+            
+            <a-entity  
+                id="nedkelly"  
+                gltf-model="#nedkelly-gtlf" 
+                animation-mixer
+                position="-1.353 -1.623 4"       
+                scale="0.01 0.01 0.01"
+                rotation="0 180 0">
+            </a-entity>
+            
+            <a-entity 
+                gltf-model="#environment"
+                rotation="0 90 0"
+                      scale="5.5 5.5 5.5">
+            </a-entity>
+            
+            
+        </a-scene>
     </body>
     
     
