@@ -8,7 +8,7 @@ AFRAME.registerComponent('nedkelly-logic', {
         var el = this.el;
         var nedkelly = document.querySelector('#nedkelly');
         var scene = document.querySelector('a-scene');
-        var audio = new Audio('../audio/folksey-mixkit.mp3');
+        var audio = new Audio('./audio/folksey-mixkit.mp3');
         
         // Determines the random idles for Ned Kelly  
                 var idles = ["idleLooking", "idleMoving", "idleStill"];
