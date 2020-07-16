@@ -24,23 +24,35 @@
                  nedkelly-logic 
                  rain = "splash: false"
                  fog = "type: exponential; 
-                        color: #586247; 
+                        color: #22251e; 
                         density: 0.1" 
                  renderer="alpha: false;">
             
             <!-- Asset management system. -->
             <a-assets>
                 <a-asset-item id="nedkelly-gtlf" src="models/nedKelly.glb" response-type="arraybuffer"></a-asset-item>
-                <a-asset-item id="environment" src="models/lake-environment.glb" response-type="arraybuffer"></a-asset-item>
+                <a-asset-item id="environment-gtlf" src="models/lake-environment.glb" response-type="arraybuffer"></a-asset-item>
+                <a-asset-item id="water-gtlf" src="models/water.glb" response-type="arraybuffer"></a-asset-item>
                 <!-- <img id="sky" src="img/autumn_forest_03_1k.png"> -->
             </a-assets>
             
+            
             <!-- Camera Settings. -->            
-            <a-entity position="0 -1 5.9">
+            <a-entity id="camera" position="0 -1 5.9">
                 <a-camera user-height=2.6></a-camera> 
             </a-entity>
-            
-            <a-sky color="#ECECEC"></a-sky>
+
+            <!-- Lighting -->
+            <a-light type="hemisphere" intensity="0.4"></a-light>
+            <a-light 
+                     id="moon" light="distance: 12.71; decay: 0.48" 
+                     type="spot" 
+                     intensity="0.4" 
+                     rotation="180 0 0" 
+                     position="0 5.939 -6.617" 
+                     penumbra="1">
+            </a-light>
+            <a-sky  color="#22251e"></a-sky>
             
    
             
@@ -53,10 +65,16 @@
                 rotation="0 180 0">
             </a-entity>
             
-            <a-entity 
-                gltf-model="#environment"
+            <a-entity
+                id="environment" 
+                gltf-model="#environment-gtlf"
                 rotation="0 90 0"
                       scale="5.5 5.5 5.5">
+            </a-entity>
+            <a-entity
+                id="water" position="-0.10498 -0.04658 0" scale="5.5 5.5 5.5" rotation="0 90 0" 
+                gltf-model="#water-gtlf" 
+                animation-mixer>
             </a-entity>
             
             
