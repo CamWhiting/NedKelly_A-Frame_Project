@@ -7,6 +7,7 @@ AFRAME.registerComponent('nedkelly-logic', {
         // Defined items for easier referencing
         var el = this.el;
         var nedkelly = document.querySelector('#nedkelly');
+        var police = document.querySelector('#police');
         var scene = document.querySelector('a-scene');
         var audio = new Audio('./audio/folksey-mixkit.mp3');
         
@@ -32,20 +33,36 @@ AFRAME.registerComponent('nedkelly-logic', {
                 };  
             });
         
-        el.addEventListener('mousedown', function() {
+        el.addEventListener('pointerdown', function() {
             nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", loop: "once", clampWhenFinished: "true",});
             audio.play();
             audio.loop = true;
+            
+            // A variable to determine if a death trigger will set
+            var death = false;
         });
         
         
-        el.addEventListener('mouseup', function() {
+        el.addEventListener('pointerup', function() {
             nedkelly.removeAttribute("animation-mixer");
             nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", clampWhenFinished: "false",
             timeScale: "-0.3"}); 
            
-            
+           
+             var death = true;
         });   
+        
+        
+
+        
+        if($death = true){
+            police.setAttribute("animation-mixer", {clip: "shoot", crossFadeDuration: ".2", clampWhenFinished: "true"}); 
+//            nedkelly.removeEventListener("mousedown", myFunction);
+//            nedkelly.removeEventListener("mouseup", myFunction);
+            nedkelly.removeAttribute("animation-mixer");
+            nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"}); 
+           };
+        
 }});
            
 

@@ -31,8 +31,10 @@
             <!-- Asset management system. -->
             <a-assets>
                 <a-asset-item id="nedkelly-gtlf" src="models/nedKelly.glb" response-type="arraybuffer"></a-asset-item>
+                <a-asset-item id="police-gtlf" src="models/police_test.glb" response-type="arraybuffer"></a-asset-item>
+                
                 <a-asset-item id="environment-gtlf" src="models/lake-environment.glb" response-type="arraybuffer"></a-asset-item>
-                <a-asset-item id="water-gtlf" src="models/water.glb" response-type="arraybuffer"></a-asset-item>
+                <a-asset-item id="water-gtlf" src="models/water.glb" response-stype="arraybuffer"></a-asset-item>
                 <!-- <img id="sky" src="img/autumn_forest_03_1k.png"> -->
             </a-assets>
             
@@ -43,14 +45,16 @@
             </a-entity>
 
             <!-- Lighting -->
-            <a-light type="hemisphere" intensity="0.4"></a-light>
+            <a-light type="hemisphere" intensity=".4" ></a-light>
             <a-light 
-                     id="moon" light="distance: 12.71; decay: 0.48" 
+                     id="moon" 
+                     light="distance: 12.71; decay: 0.48" 
                      type="spot" 
-                     intensity="0.4" 
+                     intensity="0.9" 
                      rotation="180 0 0" 
                      position="0 5.939 -6.617" 
-                     penumbra="1">
+                     penumbra="0"
+                     >
             </a-light>
             <a-sky  color="#22251e"></a-sky>
             
@@ -63,6 +67,14 @@
                 position="-1.353 -1.623 4"       
                 scale="0.01 0.01 0.01"
                 rotation="0 180 0">
+            </a-entity>
+            
+            
+             <a-entity  
+                id="police"  
+                gltf-model="#police-gtlf" 
+                animation-mixer
+                       >
             </a-entity>
             
             <a-entity
