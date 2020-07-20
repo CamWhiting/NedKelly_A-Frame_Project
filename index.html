@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <!--Remember to upload document to a https: page and not http as there are security risks that will refrain the page access otherwise-->
-
-    
-    
-    
+  
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,18 +12,27 @@
         <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.0/dist/aframe-extras.min.js"></script>
         <script src="js/A-Frame/aframe-rain.min.js"></script> 
-        <script src="js/custom.js"></script>     
+        
+        <!-- Custom CSS/JS -->
+        <link rel="stylesheet" type="text/css" href="css/main.css"> 
+        <script src="js/custom.js"></script>
     </head>
     
     <body>
+            <!-- UI Elements-->
+        
+            <!-- Air Gauge -->
+            <progress id="air" max="100" value="100"></progress>
+        
+        <!-- stats -->
         <a-scene 
-                 stats 
-                 nedkelly-logic 
-                 rain = "splash: false"
-                 fog = "type: exponential; 
-                        color: #22251e; 
-                        density: 0.1" 
-                 renderer="alpha: false;">
+         nedkelly-logic 
+         rain = "splash: false"
+         fog = "type: exponential; 
+                color: #22251e; 
+                density: 0.1" 
+         renderer="alpha: false;"
+         >
             
             <!-- Asset management system. -->
             <a-assets>
@@ -38,7 +44,6 @@
                 <!-- <img id="sky" src="img/autumn_forest_03_1k.png"> -->
             </a-assets>
             
-            
             <!-- Camera Settings. -->            
             <a-entity id="camera" position="0 -1 5.9">
                 <a-camera user-height=2.6></a-camera> 
@@ -47,7 +52,7 @@
             <!-- Lighting -->
             <a-light type="hemisphere" intensity=".4" ></a-light>
             <a-light 
-                     id="moon" 
+                     id="moon-spot" 
                      light="distance: 12.71; decay: 0.48" 
                      type="spot" 
                      intensity="0.9" 
@@ -56,7 +61,7 @@
                      penumbra="0"
                      >
             </a-light>
-            <a-sky  color="#22251e"></a-sky>
+            <a-sky color="#22251e"></a-sky>
             
    
             

@@ -1,0 +1,18 @@
+/*
+CSS
+*/
+
+progress {
+    width: 95%;
+    background-color: #ddd;
+   transition: all 500ms ease-out;
+/*
+    transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+*/
+    display: block;
+    position: fixed;
+    z-index: 9999;
+    margin: 1% 2.5%;
+}

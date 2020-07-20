@@ -11,6 +11,8 @@ AFRAME.registerComponent('nedkelly-logic', {
         var scene = document.querySelector('a-scene');
         var audio = new Audio('./audio/folksey-mixkit.mp3');
         
+        var air = document.querySelector('#air').value;
+        
         // Determines the random idles for Ned Kelly  
                 var idles = ["idleLooking", "idleMoving", "idleStill"];
                 var randomidles = "idleLooking";
@@ -33,28 +35,61 @@ AFRAME.registerComponent('nedkelly-logic', {
                 };  
             });
         
+        
+        
+            
+            function drowning(){
+                if (air = 0){
+                    nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
+                } 
+                else {      
+                    air--;
+                    console.log(air);
+                }
+            }
+        
+        // Code to crouch Ned Kelly
         el.addEventListener('pointerdown', function() {
-            nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", loop: "once", clampWhenFinished: "true",});
             audio.play();
             audio.loop = true;
+             nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", loop: "once", clampWhenFinished: "true",});
+
+            var losingair = setInterval(drowning, 250); 
+            
+            
             
             // A variable to determine if a death trigger will set
             var death = false;
         });
         
         
+        // Code to surface Ned Kelly 
         el.addEventListener('pointerup', function() {
             nedkelly.removeAttribute("animation-mixer");
             nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", clampWhenFinished: "false",
             timeScale: "-0.3"}); 
-           
-           
-             var death = true;
+
+            clearInterval(downing);
+            
+            setInterval(breathing, 200);
+            function breathing() {
+                if (air = 100) {
+                    clearInterval(breathing);
+                }
+                else {
+                    air++; 
+                    console.log(air);
+                }
+            
+            }
+            
+            
+            
+            var death = true;
         });   
         
         
-
-        
+        // If Ned Kelly is seen kill him. Kill him dead :P
         if($death = true){
             police.setAttribute("animation-mixer", {clip: "shoot", crossFadeDuration: ".2", clampWhenFinished: "true"}); 
 //            nedkelly.removeEventListener("mousedown", myFunction);
@@ -63,7 +98,12 @@ AFRAME.registerComponent('nedkelly-logic', {
             nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"}); 
            };
         
-}});
+    
+    
+        
+        
+    }
+});
            
 
 
