@@ -11,7 +11,9 @@ AFRAME.registerComponent('nedkelly-logic', {
         var scene = document.querySelector('a-scene');
         var audio = new Audio('./audio/folksey-mixkit.mp3');
         
-        var air = document.querySelector('#air').value;
+        // Air Vairables
+        var air = document.querySelector('#air');
+        var losingairInterval, gainingairInterval;
         
         // Determines the random idles for Ned Kelly  
                 var idles = ["idleLooking", "idleMoving", "idleStill"];
@@ -20,7 +22,7 @@ AFRAME.registerComponent('nedkelly-logic', {
         // Default animation for Ned Kelly        
             nedkelly.setAttribute("animation-mixer");
         
-        // Checks if animation loop has ended
+        // Checks if animation loop has ended for Ned Kelly
             nedkelly.addEventListener('animation-loop', function () {                
                 
                 // If animation clip is one of the random idles in the array
@@ -34,31 +36,34 @@ AFRAME.registerComponent('nedkelly-logic', {
                     nedkelly.setAttribute("animation-mixer", {clip: randomidles, crossFadeDuration: ".3", loop:"repeat"});
                 };  
             });
-        
-        
-        
-            
-            function drowning(){
-                if (air = 0){
-                    nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
-                } 
-                else {      
-                    air--;
-                    console.log(air);
-                }
+
+        // Drowning Mechanic    
+        function drowning() {
+            if (air.value <= 0) {
+                console.log("You have drowned");
+                clearInterval(losingairInterval);
+                nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"}); 
+            } else {
+                air.value--;
             }
+        }
+        
+        // Breathing Mechanic
+        function gainingair() {
+            if (air.value == 100) {
+                clearInterval(gainingairInterval);
+            } else {
+                air.value++;
+            }
+        }
         
         // Code to crouch Ned Kelly
         el.addEventListener('pointerdown', function() {
             audio.play();
             audio.loop = true;
              nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", loop: "once", clampWhenFinished: "true",});
-
-            var losingair = setInterval(drowning, 250); 
-            
-            
-            
-            // A variable to determine if a death trigger will set
+            clearInterval(gainingairInterval);
+            losingairInterval = setInterval(drowning, 100);
             var death = false;
         });
         
@@ -67,24 +72,9 @@ AFRAME.registerComponent('nedkelly-logic', {
         el.addEventListener('pointerup', function() {
             nedkelly.removeAttribute("animation-mixer");
             nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", clampWhenFinished: "false",
-            timeScale: "-0.3"}); 
-
-            clearInterval(downing);
-            
-            setInterval(breathing, 200);
-            function breathing() {
-                if (air = 100) {
-                    clearInterval(breathing);
-                }
-                else {
-                    air++; 
-                    console.log(air);
-                }
-            
-            }
-            
-            
-            
+            timeScale: "-0.3"});
+            clearInterval(losingairInterval);
+            gainingairInterval = setInterval(gainingair, 200);
             var death = true;
         });   
         
@@ -96,18 +86,10 @@ AFRAME.registerComponent('nedkelly-logic', {
 //            nedkelly.removeEventListener("mouseup", myFunction);
             nedkelly.removeAttribute("animation-mixer");
             nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"}); 
-           };
-        
-    
-    
-        
-        
+           };  
     }
 });
-           
 
-
-//                 console.log("done");
 
 
 
