@@ -35,11 +35,10 @@
             <!-- Asset management system. -->
             <a-assets>
                 <a-asset-item id="nedkelly-gtlf" src="models/nedKelly.glb" response-type="arraybuffer"></a-asset-item>
-                <a-asset-item id="police-gtlf" src="models/police_test.glb" response-type="arraybuffer"></a-asset-item>
+                <a-asset-item id="police-gtlf" src="models/police_test2.glb" response-type="arraybuffer"></a-asset-item>
                 
                 <a-asset-item id="environment-gtlf" src="models/lake-environment.glb" response-type="arraybuffer"></a-asset-item>
                 <a-asset-item id="water-gtlf" src="models/water.glb" response-stype="arraybuffer"></a-asset-item>
-                <!-- <img id="sky" src="img/autumn_forest_03_1k.png"> -->
             </a-assets>
             
             <!-- Camera Settings. -->            
@@ -56,7 +55,7 @@
                      intensity="0.9" 
                      rotation="180 0 0" 
                      position="0 5.939 -6.617" 
-                     penumbra="0"
+                     penumbra="0.5"
                      >
             </a-light>
             <a-sky color="#22251e"></a-sky>
@@ -74,7 +73,9 @@
              <a-entity  
                 id="police"  
                 gltf-model="#police-gtlf" 
-                animation-mixer
+                scale="0.01 0.01 0.01"
+                animation-mixer 
+                rotation="-90 0 90"
                        >
             </a-entity>
             
@@ -82,7 +83,7 @@
                 id="environment" 
                 gltf-model="#environment-gtlf"
                 rotation="0 90 0"
-                      scale="5.5 5.5 5.5">
+                scale="5.5 5.5 5.5">
             </a-entity>
             <a-entity
                 id="water" position="-0.10498 -0.04658 0" scale="5.5 5.5 5.5" rotation="0 90 0" 

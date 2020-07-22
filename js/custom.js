@@ -14,6 +14,7 @@ AFRAME.registerComponent('nedkelly-logic', {
         // Air Vairables
         var air = document.querySelector('#air');
         var losingairInterval, gainingairInterval;
+        var death = true;
         
         // Determines the random idles for Ned Kelly  
                 var idles = ["idleLooking", "idleMoving", "idleStill"];
@@ -21,7 +22,9 @@ AFRAME.registerComponent('nedkelly-logic', {
         
         // Default animation for Ned Kelly        
             nedkelly.setAttribute("animation-mixer");
-        
+            police.setAttribute("animation-mixer", {clip:"idleMoving"});
+           
+
         // Checks if animation loop has ended for Ned Kelly
             nedkelly.addEventListener('animation-loop', function () {                
                 
@@ -75,15 +78,21 @@ AFRAME.registerComponent('nedkelly-logic', {
             timeScale: "-0.3"});
             clearInterval(losingairInterval);
             gainingairInterval = setInterval(gainingair, 200);
-            var death = true;
         });   
         
+         console.log(police.getAttribute("animation-mixer"));
         
-        // If Ned Kelly is seen kill him. Kill him dead :P
-        if($death = true){
-            police.setAttribute("animation-mixer", {clip: "shoot", crossFadeDuration: ".2", clampWhenFinished: "true"}); 
-//            nedkelly.removeEventListener("mousedown", myFunction);
-//            nedkelly.removeEventListener("mouseup", myFunction);
+     
+
+        if (police.getAttribute("animation-mixer").clip === "lookAt"){
+            console.log("U R DEAD");
+            
+              
+         console.log(police.getAttribute("animation-mixer"));
+            
+            police.setAttribute("animation-mixer", {clip: "shootAt", crossFadeDuration: ".2", clampWhenFinished: "true", loop:"once"}); 
+            // nedkelly.removeEventListener("mousedown", myFunction);
+            // nedkelly.removeEventListener("mouseup", myFunction);
             nedkelly.removeAttribute("animation-mixer");
             nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"}); 
            };  
