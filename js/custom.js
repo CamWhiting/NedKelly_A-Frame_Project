@@ -9,7 +9,9 @@ AFRAME.registerComponent('nedkelly-logic', {
         var nedkelly = document.querySelector('#nedkelly');
         var police = document.querySelector('#police');
         var scene = document.querySelector('a-scene');
+        
         var audio = new Audio('./audio/folksey-mixkit.mp3');
+        audio.volume = 0.2;
         
         // Air Vairables
         var air = document.querySelector('#air');
@@ -39,11 +41,22 @@ AFRAME.registerComponent('nedkelly-logic', {
                     nedkelly.setAttribute("animation-mixer", {clip: randomidles, crossFadeDuration: ".3", loop:"repeat"});
                 };  
             });
+        
+
+//        Why does this not work?
+        if (nedkelly){
+             if (nedkelly.getAttribute("animation-mixer").clip === "idleStill") {
+        console.log("this does work");
+//              document.removeEventListener('pointerdown', myFunction);
+//              document.removeEventListener('pointerup', myFunction);
+//              nedkelly.removeAttribute("animation-mixer");
+    };
+        }
+       
 
         // Drowning Mechanic    
         function drowning() {
             if (air.value <= 0) {
-                console.log("You have drowned");
                 clearInterval(losingairInterval);
                 nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"}); 
             } else {
@@ -70,7 +83,6 @@ AFRAME.registerComponent('nedkelly-logic', {
             var death = false;
         });
         
-        
         // Code to surface Ned Kelly 
         el.addEventListener('pointerup', function() {
             nedkelly.removeAttribute("animation-mixer");
@@ -79,23 +91,14 @@ AFRAME.registerComponent('nedkelly-logic', {
             clearInterval(losingairInterval);
             gainingairInterval = setInterval(gainingair, 200);
         });   
-        
-         console.log(police.getAttribute("animation-mixer"));
-        
-     
 
-        if (police.getAttribute("animation-mixer").clip === "lookAt"){
-            console.log("U R DEAD");
-            
-              
-         console.log(police.getAttribute("animation-mixer"));
-            
+        if (police.getAttribute("animation-mixer").clip === "lookAt" && death == true){
             police.setAttribute("animation-mixer", {clip: "shootAt", crossFadeDuration: ".2", clampWhenFinished: "true", loop:"once"}); 
-            // nedkelly.removeEventListener("mousedown", myFunction);
-            // nedkelly.removeEventListener("mouseup", myFunction);
-            nedkelly.removeAttribute("animation-mixer");
             nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"}); 
-           };  
+           }; 
+        
+        
+  
     }
 });
 

@@ -35,9 +35,11 @@
             <!-- Asset management system. -->
             <a-assets>
                 <a-asset-item id="nedkelly-gtlf" src="models/nedKelly.glb" response-type="arraybuffer"></a-asset-item>
-                <a-asset-item id="police-gtlf" src="models/police_test2.glb" response-type="arraybuffer"></a-asset-item>
+                
+                <a-asset-item id="police-gtlf" src="models/police.glb" response-type="arraybuffer"></a-asset-item>
                 
                 <a-asset-item id="environment-gtlf" src="models/lake-environment.glb" response-type="arraybuffer"></a-asset-item>
+                
                 <a-asset-item id="water-gtlf" src="models/water.glb" response-stype="arraybuffer"></a-asset-item>
             </a-assets>
             
@@ -69,14 +71,13 @@
                 rotation="0 180 0">
             </a-entity>
             
-            
              <a-entity  
                 id="police"  
                 gltf-model="#police-gtlf" 
-                scale="0.01 0.01 0.01"
-                animation-mixer 
-                rotation="-90 0 90"
-                       >
+                animation-mixer
+                position="-0.434 -0.138 -0.460"
+                rotation="-12.874 170.981 2.449"
+                scale="0.007 0.007 0.007">
             </a-entity>
             
             <a-entity
@@ -85,6 +86,7 @@
                 rotation="0 90 0"
                 scale="5.5 5.5 5.5">
             </a-entity>
+            
             <a-entity
                 id="water" position="-0.10498 -0.04658 0" scale="5.5 5.5 5.5" rotation="0 90 0" 
                 gltf-model="#water-gtlf" 
