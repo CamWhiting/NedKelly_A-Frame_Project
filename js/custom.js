@@ -2,7 +2,7 @@
 
 // Component to Ned Kelly Logic
 AFRAME.registerComponent('nedkelly-logic', {
-    init: function() {
+    init: function () {
         
         // Defined items for easier referencing
         var el = this.el;
@@ -13,52 +13,41 @@ AFRAME.registerComponent('nedkelly-logic', {
         var audio = new Audio('./audio/folksey-mixkit.mp3');
         audio.volume = 0.2;
         
+        /////// NED KELLY LOGIC ///////
+        
         // Air Vairables
         var air = document.querySelector('#air');
         var losingairInterval, gainingairInterval;
         var death = true;
         
         // Determines the random idles for Ned Kelly  
-                var idles = ["idleLooking", "idleMoving", "idleStill"];
-                var randomidles = "idleLooking";
+        var idles = ["idleLooking", "idleMoving", "idleStill"];
+        var randomidles = "idleLooking";
         
         // Default animation for Ned Kelly        
-            nedkelly.setAttribute("animation-mixer");
-            police.setAttribute("animation-mixer", {clip:"idleMoving"});
-           
-
+        nedkelly.setAttribute("animation-mixer", {clip: randomidles});
+    
         // Checks if animation loop has ended for Ned Kelly
-            nedkelly.addEventListener('animation-loop', function () {                
-                
-                // If animation clip is one of the random idles in the array
-                if(nedkelly.getAttribute = nedkelly.getAttribute("animation-mixer", {clip: randomidles})) {
-                    
-                    // Variable makes idles random
-                    var randomidles = idles[Math.floor(Math.random() * idles.length)];
-                   
-                    // See what animation it is and reapply a random idle.
-                    nedkelly.removeAttribute("animation-mixer");
-                    nedkelly.setAttribute("animation-mixer", {clip: randomidles, crossFadeDuration: ".3", loop:"repeat"});
-                };  
-            });
-        
+        nedkelly.addEventListener('animation-loop', function () {                
 
-//        Why does this not work?
-        if (nedkelly){
-             if (nedkelly.getAttribute("animation-mixer").clip === "idleStill") {
-        console.log("this does work");
-//              document.removeEventListener('pointerdown', myFunction);
-//              document.removeEventListener('pointerup', myFunction);
-//              nedkelly.removeAttribute("animation-mixer");
-    };
-        }
-       
+        // If animation clip is one of the random idles in the array
+        if(nedkelly.getAttribute = nedkelly.getAttribute("animation-mixer", {clip: randomidles})) {
+            // Variable makes idles random
+            var randomidles = idles[Math.floor(Math.random() * idles.length)];
+
+                // See what animation it is and reapply a random idle.
+                nedkelly.removeAttribute("animation-mixer");
+                nedkelly.setAttribute("animation-mixer", {clip: randomidles, crossFadeDuration: ".3", loop:"repeat"});
+            };  
+        });
 
         // Drowning Mechanic    
         function drowning() {
             if (air.value <= 0) {
                 clearInterval(losingairInterval);
-                nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"}); 
+                nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
+                el.removeEventListener('pointerdown', crouchingdown);
+                el.removeEventListener('pointerup', crouchingup);
             } else {
                 air.value--;
             }
@@ -74,33 +63,106 @@ AFRAME.registerComponent('nedkelly-logic', {
         }
         
         // Code to crouch Ned Kelly
-        el.addEventListener('pointerdown', function() {
-            audio.play();
-            audio.loop = true;
-             nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", loop: "once", clampWhenFinished: "true",});
-            clearInterval(gainingairInterval);
-            losingairInterval = setInterval(drowning, 100);
-            var death = false;
-        });
-        
-        // Code to surface Ned Kelly 
-        el.addEventListener('pointerup', function() {
-            nedkelly.removeAttribute("animation-mixer");
-            nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", clampWhenFinished: "false",
-            timeScale: "-0.3"});
-            clearInterval(losingairInterval);
-            gainingairInterval = setInterval(gainingair, 200);
-        });   
+                    
+            function crouchingdown() {
+                audio.play();
+                audio.loop = true;
+                 nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", loop: "once", clampWhenFinished: "true",});
+                clearInterval(gainingairInterval);
+                losingairInterval = setInterval(drowning, 100);
+                death = false;
+            };
 
-        if (police.getAttribute("animation-mixer").clip === "lookAt" && death == true){
-            police.setAttribute("animation-mixer", {clip: "shootAt", crossFadeDuration: ".2", clampWhenFinished: "true", loop:"once"}); 
-            nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"}); 
-           }; 
+            // Code to surface Ned Kelly 
+            function crouchingup() {
+                nedkelly.removeAttribute("animation-mixer");
+                nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", clampWhenFinished: "false",
+                timeScale: "-0.3"});
+                clearInterval(losingairInterval);
+                gainingairInterval = setInterval(gainingair, 200);
+            }; 
+        
+                
+        // Crouch Controls
+        el.addEventListener('pointerup', crouchingup);
+        el.addEventListener('pointerdown', crouchingdown);
+    
         
         
-  
-    }
-});
+        
+        
+        
+        
+        /////// POLICEMAN LOGIC ///////
+        
+        
+        // Determines the random idles for Policeman 
+        var idlespolice = ["idleLooking", "idleMoving", "idle"];
+        var randomidlespolice = "idleLooking";
+        var turning = ["turningLeft", "turningRight"];
+        
+        // Variable makes idles random
+        var randomidlespolice = idlespolice[Math.floor(Math.random() * idlespolice.length)];
+        
+        // Variable makes turning random
+        var randomturning = turning[Math.floor(Math.random() * turning.length)];
+        
+        // animation helpers - Simplifies the Policeman's turning logic
+        var animations = [randomidlespolice, randomturning, "idleAt"]
+        var clipId = 0;
+        
+        // Default animation for Policeman        
+        police.setAttribute("animation-mixer", {clip: randomidlespolice});
+        
+        
+
+        // Idle counter (to determine when to turn around)
+        var counter = 0;
+        
+        // Number used when to turn around between 1 & 3 idles
+        function randomIntFromInterval(min, max) { // min and max included 
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+        
+        var countertrigger = randomIntFromInterval(1,3);
+    
+        // upon each animation loop...
+        police.addEventListener('animation-loop', function () {
+         
+            
+            
+            // check if idle, and should be idle longer
+            if (clipId === 0 && counter < countertrigger) {
+                counter++;
+                return;
+            }
+
+            // check if this was the last animation
+            if (clipId === (animations.length - 1)) {
+                // Reset helpers
+                clipId = 0;
+                counter = 1; // the animation will be played once within this callback
+                countertrigger = randomIntFromInterval(1,3);
+            } else {
+                clipId++
+            };
+
+            // play the next clip
+            police.setAttribute("animation-mixer", {clip: animations[clipId]});
+            
+            if (police.getAttribute("animation-mixer").clip === "idleAt" && death === true) {
+                police.setAttribute("animation-mixer", {clip: "shootAt", crossFadeDuration: ".2", clampWhenFinished: "true", loop:"once"}); 
+                nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
+//              el.removeEventListener('pointerdown', crouchingdown);
+//              el.removeEventListener('pointerup', crouchingup);
+                
+            };
+        });
+    
+    }  
+});   
+
+
 
 
 
