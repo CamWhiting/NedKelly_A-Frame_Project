@@ -132,7 +132,7 @@ AFRAME.registerComponent('nedkelly-logic', {
         
         var countertrigger = randomIntFromInterval(1,3);
         
-        if (police.getAttribute("animation-mixer").clip === "idleAt") {
+        if (police.getAttribute("animation-mixer").clip === "idleAt" && death === true) {
             el.removeEventListener('pointerdown', crouchingdown);
             el.removeEventListener('pointerup', crouchingup);
             police.setAttribute("animation-mixer", {clip: "shootAt", crossFadeDuration: ".2", clampWhenFinished: "true", loop:"once"});
