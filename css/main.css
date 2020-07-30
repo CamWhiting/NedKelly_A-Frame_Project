@@ -16,3 +16,8 @@ progress {
     z-index: 9999;
     margin: 1% 2.5%;
 }
+
+
+#blackingout {
+    background-color: black;
+}

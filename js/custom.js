@@ -6,19 +6,19 @@ AFRAME.registerComponent('nedkelly-logic', {
 
         // Defined items for easier referencing
         var el = this.el;
-        var nedkelly = document.querySelector('#nedkelly');
-        var scene = document.querySelector('a-scene');
+        var nedkelly = document.querySelector('#nedkelly')
+        var scene = document.querySelector('a-scene')
 
         var death = true;
 
-        var audio = new Audio('./audio/folksey-mixkit.mp3');
+        var audio = new Audio('./audio/folksey-mixkit.mp3')
         audio.volume = 0.2;
 
 
         /////// NED KELLY LOGIC ///////
 
         // Air Vairables
-        var air = document.querySelector('#air');
+        var air = document.querySelector('#air')
         var losingairInterval, gainingairInterval;
 
 
@@ -40,13 +40,13 @@ AFRAME.registerComponent('nedkelly-logic', {
                     // See what animation it is and reapply a random idle.
                     nedkelly.removeAttribute("animation-mixer");
                     nedkelly.setAttribute("animation-mixer", {clip: randomidles, crossFadeDuration: ".3", loop:"repeat"});
-            };
+            }
         });
 
         // Drowning Mechanic
         function drowning() {
             if (air.value <= 0) {
-                clearInterval(losingairInterval);
+                clearInterval(losingairInterval)
                 nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
                 el.removeEventListener('pointerdown', crouchingdown);
                 el.removeEventListener('pointerup', crouchingup);
@@ -58,7 +58,7 @@ AFRAME.registerComponent('nedkelly-logic', {
         // Breathing Mechanic
         function gainingair() {
             if (air.value == 100) {
-                clearInterval(gainingairInterval);
+                clearInterval(gainingairInterval)
             } else {
                 air.value++;
             }
@@ -70,18 +70,18 @@ AFRAME.registerComponent('nedkelly-logic', {
             audio.play();
             audio.loop = true;
              nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", loop: "once", clampWhenFinished: "true",});
-            clearInterval(gainingairInterval);
-            losingairInterval = setInterval(drowning, 100);
+            clearInterval(gainingairInterval)
+            losingairInterval = setInterval(drowning, 100)
             death = false;
-        };
+        }
 
         // Code to surface Ned Kelly
         function crouchingup() {
             nedkelly.removeAttribute("animation-mixer");
             nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", clampWhenFinished: "false",
             timeScale: "-0.3"});
-            clearInterval(losingairInterval);
-            gainingairInterval = setInterval(gainingair, 200);
+            clearInterval(losingairInterval)
+            gainingairInterval = setInterval(gainingair, 200)
             death = true;
 
             // If kill case 1: If player goes up while Police is looking. If so, shoot player. This works in all instances UNLESS the player never ducked
@@ -92,9 +92,9 @@ AFRAME.registerComponent('nedkelly-logic', {
                  police.setAttribute("animation-mixer", {clip: "shootAt", crossFadeDuration: ".2", clampWhenFinished: "true", loop:"once"});
                  nedkelly.removeAttribute("animation-mixer");
                  nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
-            };
+            }
 
-        };
+        }
 
         // Crouch Controls
         el.addEventListener('pointerup', crouchingup);
@@ -103,14 +103,15 @@ AFRAME.registerComponent('nedkelly-logic', {
 
         /////// POLICEMAN LOGIC ///////
 
-        var police = document.querySelector('#police');
+        var police = document.querySelector('#police')
 
         // Determines the random idles for Policeman
         var idlespolice = ["idleLooking", "idleMoving", "idle"];
         var randomidlespolice = "idle";
+        var shoot = "shootAt"
 
         var randomturning = "turningLeft";
-        var turning = ["turningLeft", "turningRight"];
+        var turning = ["turningLeft", "turningRight"]
 
         // Default animation for Policeman
         police.setAttribute("animation-mixer", {clip: randomidlespolice});
@@ -130,27 +131,12 @@ AFRAME.registerComponent('nedkelly-logic', {
         var countertrigger = randomIntFromInterval(1,3);
 
         // upon each animation loop...
-       function policeloop() {
-            if (police.getAttribute("animation-mixer").clip === randomturning){
-
-                // If kill case 2: If player never ducked while Police is looking. If so, shoot player. This works ONLY when turn animation has ended
-                if (death === true){
-
-                    police.setAttribute("animation-mixer", {clip: "shootAt", crossFadeDuration: ".2", clampWhenFinished: "true", loop:"once"});
-                    removeEventListener('animation-loop', policeloop);
-                    police.removeAttribute("animation-mixer");
-
-
-                    removeEventListener('pointerdown', crouchingdown);
-                    removeEventListener('pointerup', crouchingup);
-                    nedkelly.removeAttribute("animation-mixer");
-                    nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
-                }
-            };
+        police.addEventListener('animation-loop', function() {
+            
                 // Randomise Police turn for next time. CANNOT USE UNTIL FIX TURNING KILL LOGIC
                 // randomturning = turning[Math.floor(Math.random() * turning.length)];
 
-            if (police.getAttribute = police.getAttribute("animation-mixer", {clip: randomidlespolice})){
+            if (police.getAttribute("animation-mixer").clip === randomidlespolice){
                 // Variable makes turning random
                 randomidlespolice = idlespolice[Math.floor(Math.random() * idlespolice.length)];
 
@@ -158,7 +144,6 @@ AFRAME.registerComponent('nedkelly-logic', {
                 police.setAttribute("animation-mixer", {clip: randomidlespolice, crossFadeDuration: ".3", loop:"repeat"});
 
             };
-
 
             // check if idle, and should be idle longer
             if (clipId === 0 && counter < countertrigger) {
@@ -174,13 +159,33 @@ AFRAME.registerComponent('nedkelly-logic', {
                 countertrigger = randomIntFromInterval(1,3);
             } else {
                 clipId++
-            };
-
-            // play the next clip
+            }
+              
+          
+            
+            if (police.getAttribute("animation-mixer").clip === randomturning && death === true){
+                    console.log("you should be dead");
+                // If kill case 2: If player never ducked while Police is looking. If so, shoot player. This works ONLY when turn animation has ended
+           
+                 
+            
+                    police.removeAttribute("animation-mixer");
+                    police.setAttribute("animation-mixer", {clip: "shootAt", crossFadeDuration: ".2", clampWhenFinished: "true", loop:"once"});
+                    el.removeEventListener('pointerdown', crouchingdown);
+                    el.removeEventListener('pointerup', crouchingup);
+                    nedkelly.removeAttribute("animation-mixer");
+                    nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
+                    el.removeEventListener('animation-loop', policeloop);
+             
+                
+             
+            } else {
+                // play the next clip
                 police.setAttribute("animation-mixer", {clip: animations[clipId]});
+            }
 
-        };
+        });
 
-         police.addEventListener('animation-loop', policeloop);
+        
     }
 });
