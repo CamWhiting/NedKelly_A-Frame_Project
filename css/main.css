@@ -2,22 +2,51 @@
 CSS
 */
 
-progress {
-    width: 95%;
-    background-color: #ddd;
-   transition: all 500ms ease-out;
-/*
-    transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-*/
-    display: block;
-    position: fixed;
-    z-index: 9999;
-    margin: 1% 2.5%;
+#score-bg {
+ display: block;
+  width: 1vw;
+  height: 1vh;
+  border-style: solid;
+  border-width:  0 0 200px 201px; 
+  border-color: transparent #FAEBD7 transparent; 
+  position: fixed;
+  top: -10px;
+  left: 0;
+  z-index: 99998;
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+    -khtml-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
 }
 
 
-#blackingout {
-    background-color: black;
+#score-bg strong {
+position: absolute;
+left: -200px;
+padding: 1.5em 1em;
+font-size: 1.3em;
+font-family: sans-serif, "Helvetica Neue", Helvetica, Arial;
+font-weight: 200;
+line-height: 1.1;
+}
+
+#score {
+    font-size: 2em;
+}
+
+
+progress {
+    background-color: #ddd;
+    position: fixed;
+    z-index: 9999;
+    transform-origin: top right;
+    transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+    right: 5vh;
+    margin: 10vh 0;
+    width: 80vh;
+ 
 }

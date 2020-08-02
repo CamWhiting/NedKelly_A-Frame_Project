@@ -8,12 +8,35 @@ AFRAME.registerComponent('nedkelly-logic', {
         var el = this.el;
         var nedkelly = document.querySelector('#nedkelly')
         var scene = document.querySelector('a-scene')
+        
+        var score = document.querySelector("#score");
+        var interval;
 
+        var totalScore = 0;
+        
         var death = true;
 
         var audio = new Audio('./audio/folksey-mixkit.mp3')
         audio.volume = 0.2;
+        
+        // Method to stop multi-touch affecting up the breathing mechanic 
+        var killmulti = 0;
 
+        
+        /////// HIGH SCORE ///////
+        interval = setInterval(setTime, 1000);
+
+        function setTime() {
+            ++totalScore;
+            score.innerHTML = pad(totalScore);
+        }
+
+        function pad(val) {
+            var valString = val + "";
+            return valString;
+
+        }
+        
 
         /////// NED KELLY LOGIC ///////
 
@@ -39,14 +62,16 @@ AFRAME.registerComponent('nedkelly-logic', {
 
                     // See what animation it is and reapply a random idle.
                     nedkelly.removeAttribute("animation-mixer");
-                    nedkelly.setAttribute("animation-mixer", {clip: randomidles, crossFadeDuration: ".3", loop:"repeat"});
+                    nedkelly.setAttribute("animation-mixer", {clip: randomidles, crossFadeDuration: ".3", c});
             }
         });
 
         // Drowning Mechanic
         function drowning() {
             if (air.value <= 0) {
-                clearInterval(losingairInterval)
+                audio.pause();
+                clearInterval(losingairInterval);
+                clearInterval(interval);
                 nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
                 el.removeEventListener('pointerdown', crouchingdown);
                 el.removeEventListener('pointerup', crouchingup);
@@ -67,31 +92,42 @@ AFRAME.registerComponent('nedkelly-logic', {
         // Code to crouch Ned Kelly
 
         function crouchingdown() {
-            audio.play();
-            audio.loop = true;
-             nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", loop: "once", clampWhenFinished: "true",});
-            clearInterval(gainingairInterval)
-            losingairInterval = setInterval(drowning, 100)
-            death = false;
+            killmulti++;
+            console.log(killmulti)
+            
+            if (killmulti === 1) {
+                audio.play();
+                audio.loop = true;
+                 nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", loop: "once", clampWhenFinished: "true",});
+                clearInterval(gainingairInterval)
+                losingairInterval = setInterval(drowning, 200)
+                death = false;
+            }
+            
+          
         }
 
         // Code to surface Ned Kelly
         function crouchingup() {
+            killmulti--;
+            console.log(killmulti);
             nedkelly.removeAttribute("animation-mixer");
             nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", clampWhenFinished: "false",
             timeScale: "-0.3"});
             clearInterval(losingairInterval)
-            gainingairInterval = setInterval(gainingair, 200)
+            gainingairInterval = setInterval(gainingair, 400)
             death = true;
 
             // If kill case 1: If player goes up while Police is looking. If so, shoot player. This works in all instances UNLESS the player never ducked
 
             if (police.getAttribute("animation-mixer").clip === "idleAt"){
+                 audio.pause();
                  el.removeEventListener('pointerdown', crouchingdown);
                  el.removeEventListener('pointerup', crouchingup);
                  police.setAttribute("animation-mixer", {clip: "shootAt", crossFadeDuration: ".2", clampWhenFinished: "true", loop:"once"});
                  nedkelly.removeAttribute("animation-mixer");
                  nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
+                 clearInterval(interval);
             }
 
         }
@@ -164,24 +200,19 @@ AFRAME.registerComponent('nedkelly-logic', {
           
             
             if (police.getAttribute("animation-mixer").clip === randomturning && death === true){
-                    console.log("you should be dead");
-                // If kill case 2: If player never ducked while Police is looking. If so, shoot player. This works ONLY when turn animation has ended
-           
-                 
-            
+                // If kill case 2: If player never ducked while Police is looking. If so, shoot player. This works ONLY when turn animation has ended            
+                    audio.pause();
                     police.removeAttribute("animation-mixer");
                     police.setAttribute("animation-mixer", {clip: "shootAt", crossFadeDuration: ".2", clampWhenFinished: "true", loop:"once"});
                     el.removeEventListener('pointerdown', crouchingdown);
                     el.removeEventListener('pointerup', crouchingup);
                     nedkelly.removeAttribute("animation-mixer");
                     nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
-                    el.removeEventListener('animation-loop', policeloop);
-             
-                
+                    clearInterval(interval);
              
             } else {
                 // play the next clip
-                police.setAttribute("animation-mixer", {clip: animations[clipId]});
+                police.setAttribute("animation-mixer", {clip: animations[clipId],  crossFadeDuration: ".2"});
             }
 
         });
