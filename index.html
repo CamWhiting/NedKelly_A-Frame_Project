@@ -6,11 +6,10 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Ned Kelly Experiment</title>
-        <script src="js/custom.js"></script>
         
         <!-- A-Frame library + Effects -->
-        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.0/dist/aframe-extras.min.js"></script>
+        <script src="js/A-Frame/aframe.min.js"></script>
+        <script src="js/A-Frame/aframe-extra-min.js"></script>
         <script src="js/A-Frame/aframe-rain.min.js"></script> 
         
         <!-- Custom CSS/JS -->
@@ -19,132 +18,90 @@
     </head>
     
     <body>  
+    
+<!--
+         Simple minigame to play while the player waits. This is not created by me. It is available here for free use: https://github.com/NiMeDia/loaderminigame 
+        <p>The Game is currently loading. While you wait, please enjoy this minigame :)</p>
+        <iframe width="100%" height="210" src="https://nimedia.github.io/loaderminigame/docs/demo/simple.html" frameborder="0"></iframe>
+-->
         
-            <!-- stats -->
-            <a-scene 
-             nedkelly-logic 
-             vr-mode-ui="enabled: false"
-             rain = "splash: false"
-             fog = "type: exponential; 
-                    color: #22251e; 
-                    density: 0.1" 
-             renderer="alpha: false;" 
-             shadow="type: pcfsoft"
-             >
-                <!-- Air Gauge -->
-                <progress id="air" max="100" value="100"></progress>
-                
-                <!-- Score -->
-                <div id="score-bg">
-                    <strong class="notSelectable">SCORE
-                        <div id="score">0</div>
-                    </strong> 
-                </div>
-                
-                <!-- Asset management system. -->
-                <a-assets >
-                    <a-asset-item id="nedkelly-gtlf" src="models/nedKelly.glb" response-type="arraybuffer"></a-asset-item>
+        
+    <!-- stats -->
+    <a-scene 
+        nedkelly-logic=""
+        rain="splash: false" 
+        fog="type: exponential; 
+             color: #22251e; 
+             density: 0.001" 
+        renderer="alpha: false;" 
+        shadow="type: pcf" 
+        background="color: #22251E"
+        vr-mode-ui="enabled: false"
+    >
+        
+        <!-- Air Gauge -->
+        <progress id="air" max="100" value="100"></progress>
 
-                    <a-asset-item id="police-gtlf" src="models/police+gun.glb" response-type="arraybuffer"></a-asset-item>
+        <!-- Score -->
+        <div id="score-bg">
+            <strong class="notSelectable">SCORE
+                <div id="score">0</div>
+            </strong> 
+        </div>
 
-                    <a-asset-item id="environment-gtlf" src="models/lake-environment.glb" response-type="arraybuffer"></a-asset-item>
-                    
-                    <a-asset-item id="lilypad-gtlf" src="models/lilypads.glb" response-type="arraybuffer"></a-asset-item>
-                    
-                    <a-asset-item id="reed-gtlf" src="models/reed.glb" response-type="arraybuffer"></a-asset-item>
-                    
-                    <a-asset-item id="water-gtlf" src="models/water.glb" response-stype="arraybuffer"></a-asset-item>
-                </a-assets>
+        <!-- Asset management system. -->
+        <a-assets>
+            <a-asset-item id="nedkelly-gtlf" src="models/nedKelly_headless.glb" response-type="arraybuffer" foo=""></a-asset-item>
 
-                <!-- Camera Settings. -->            
-                <a-entity id="camera" position="0 -1 5.9">
-                    <a-camera user-height=2.6 wasd-controls-enabled="false" look-controls-enabled="false">
-                        
-                    </a-camera> 
-                </a-entity>
+            <a-asset-item id="police-gtlf" src="models/police+gun.glb" response-type="arraybuffer"></a-asset-item>
 
-                <!-- Lighting -->
-                <a-light type="hemisphere" intensity=".6" ></a-light>
-                <a-light 
-                         id="moon-spot"
-                         light="distance: 12.71; castShadow:true; decay: 0.48" 
-                         type="spot"
-                         castShadow: true
-                         shadowCameraVisible: true
-                         intensity="1.3" 
-                         rotation="180 0 0" 
-                         position="0 5.939 -6.617" 
-                         penumbra="0.5"
-                         >
-                </a-light>
-                <a-sky color="#22251e"></a-sky>
+            <a-asset-item id="environment-gtlf" src="models/lake-environment.glb" response-type="arraybuffer"></a-asset-item>
 
-                <a-entity  
-                    id="nedkelly"  
-                    gltf-model="#nedkelly-gtlf" 
-                    animation-mixer
-                    position="-1.353 -1.623 4"       
-                    scale="0.01 0.01 0.01"
-                    rotation="0 180 0">
-                </a-entity>
+            <a-asset-item id="lilypad-gtlf" src="models/lilypads.glb" response-type="arraybuffer"></a-asset-item>
 
-                 <a-entity  
-                    id="police"  
-                    gltf-model="#police-gtlf" 
-                    animation-mixer
-                    position="-0.434 -0.20594 -0.46"
-                    rotation="-12.874 170.981 2.449"
-                    scale="0.007 0.007 0.007" shadow="cast: true">
-                </a-entity>
+            <a-asset-item id="reed-gtlf" src="models/reed.glb" response-type="arraybuffer"></a-asset-item>
 
-                <a-entity
-                    id="environment" 
-                    gltf-model="#environment-gtlf"
-                    rotation="0 90 0"
-                    scale="5.5 5.5 5.5"
-                    shadow="cast: true; receive: true">
-                </a-entity>
-                
-                    <a-entity
-                        id="reed" position="-1.92109 -0.38319 3.30228" scale="0.13941 0.13941 0.13941" rotation="0 90 0" 
-                        gltf-model="#reed-gtlf">
-                    </a-entity>
+            <a-asset-item id="water-gtlf" src="models/water.glb" response-stype="arraybuffer"></a-asset-item>
 
-                    <a-entity
-                        id="reed-2" scale="0.13941 0.13941 0.13941" position="-3.54401 -0.38319 2.61724"
-                        gltf-model="#reed-gtlf" 
-                       >
-                    </a-entity>
+        </a-assets>
 
-                    <a-entity
-                        id="reed-3" scale="0.13941 0.13941 0.13941" rotation="0 -28.189523520436502 0" position="0.77609 -0.38319 2.23637"
-                        gltf-model="#reed-gtlf" 
-                       >
-                    </a-entity>
+        <!-- Camera Settings. -->   
+        <a-entity id="cam" scale="1 1 1" position="3.00497 21.37694 14.26701" rotation="32.00886018277858 -160.30786149965303 2.7118092443541864">
+             <a-camera position="-1.58721 32.62425 -9.63607" user-height="2.6" wasd-controls-enabled="false" look-controls="pointerLockEnabled: true" near="0.05"></a-camera>
+         </a-entity>
 
-                    <a-entity
-                        id="reed-4" scale="0.13941 0.13941 0.13941" rotation="0 -171.6690416193021 0" position="0.5005 -0.56497 1.64121"
-                        gltf-model="#reed-gtlf" 
-                       >
-                    </a-entity>
+        <!-- Lighting -->
+        <a-light type="hemisphere" intensity=".6" light=""></a-light>
+        <a-light id="moon-spot" light="distance: 1000; castShadow:true; decay: 0.48" type="spot" castshadow:="" true="" shadowcameravisible:="" intensity="1.3" rotation="180 0 0" position="0 5.939 -6.617" penumbra="0.5">
+        </a-light>
+        <a-sky color="#22251e" material="" geometry="" scale=""></a-sky>
 
-                <a-entity
-                    id="lilypad" position="-0.2477 0.01656 0" scale="5.5 5.5 5.5" rotation="0 90 0" 
-                    gltf-model="#lilypad-gtlf" 
-                    animation-mixer="loop:"repeat"">
-                </a-entity>
+        <!-- Models -->
+        <a-entity id="nedkelly" gltf-model="#nedkelly-gtlf" rotation="0 -180 0" position="-1.353 -1.623 4" scale="0.01 0.01 0.01" animation-mixer="">
+        </a-entity>
 
-                <a-entity
-                    id="water" position="-0.10498 -0.04658 0" scale="5.5 5.5 5.5" rotation="0 90 0" 
-                    gltf-model="#water-gtlf" 
-                    animation-mixer>
-                </a-entity>
+         <a-entity id="police" gltf-model="#police-gtlf" position="-0.434 -0.20594 -0.46" rotation="-12.874 170.981 2.449" scale="0.007 0.007 0.007" shadow="cast: true" animation-mixer="">
+        </a-entity>
 
+        <a-entity id="environment" gltf-model="#environment-gtlf" rotation="0 90 0" scale="5.5 5.5 5.5" shadow="cast: true; receive: true">
+        </a-entity>
 
-            </a-scene>
+            <a-entity id="reed" position="-1.92109 -0.38319 3.30228" scale="0.13941 0.13941 0.13941" rotation="0 90 0" gltf-model="#reed-gtlf">
+            </a-entity>
 
-    </body>
-    
-    
-</html>
+            <a-entity id="reed-2" scale="0.13941 0.13941 0.13941" position="-3.54401 -0.38319 2.61724" gltf-model="#reed-gtlf">
+            </a-entity>
 
+            <a-entity id="reed-3" scale="0.13941 0.13941 0.13941" rotation="0 -28.189523520436502 0" position="0.77609 -0.38319 2.23637" gltf-model="#reed-gtlf">
+            </a-entity>
+
+            <a-entity id="reed-4" scale="0.13941 0.13941 0.13941" rotation="0 -171.6690416193021 0" position="0.5005 -0.56497 1.64121" gltf-model="#reed-gtlf">
+            </a-entity>
+
+        <a-entity id="lilypad" position="-0.2477 0.01656 0" scale="5.5 5.5 5.5" rotation="0 90 0" gltf-model="#lilypad-gtlf" animation-mixer="loop:repeat">
+        </a-entity>
+
+        <a-entity id="water" position="-0.10498 -0.04658 0" scale="5.5 5.5 5.5" rotation="0 90 0" gltf-model="#water-gtlf" animation-mixer="">
+        </a-entity>
+    </a-scene>
+</body>

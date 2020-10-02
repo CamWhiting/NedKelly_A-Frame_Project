@@ -1,5 +1,7 @@
 // Custom code I use for my project
 
+
+
 // Component to Ned Kelly Logic
 AFRAME.registerComponent('nedkelly-logic', {
     init: function () {
@@ -8,8 +10,8 @@ AFRAME.registerComponent('nedkelly-logic', {
         var el = this.el;
         var nedkelly = document.querySelector('#nedkelly')
         var scene = document.querySelector('a-scene')
-        
-        var score = document.querySelector("#score");
+        var cam = document.querySelector('#cam')
+        var score = document.querySelector("#score")
         var interval;
 
         var totalScore = 0;
@@ -17,8 +19,17 @@ AFRAME.registerComponent('nedkelly-logic', {
         var death = true;
 
         var audio = new Audio('./audio/folksey-mixkit.mp3')
+        var audio2 = new Audio('./audio/folksey-mixkit-underwater.mp3')
         audio.volume = 0.2;
+        audio2.volume = 0;
         
+        // The far more complicated version of parenting the camera to Ned Kelly's head. First calling the skinned mesh THEN the skeleton. This was hands down the hardest thing to implement. I not only needed to learn Javascript and Aframe but also the fundamentals of three.js.
+        nedkelly.addEventListener('model-loaded', function(event){
+            const model = event.detail.model;
+            const skinnedMesh = model.getObjectByName('nedKelly001');
+            skinnedMesh.skeleton.bones[2].add(cam.object3D);
+        });
+  
         // Method to stop multi-touch affecting up the breathing mechanic 
         var killmulti = 0;
 
@@ -44,27 +55,9 @@ AFRAME.registerComponent('nedkelly-logic', {
         var air = document.querySelector('#air')
         var losingairInterval, gainingairInterval;
 
-
-        // Determines the random idles for Ned Kelly
-        var idles = ["idleLooking", "idleMoving", "idleStill"];
-        var randomidles = "idleLooking";
-
         // Default animation for Ned Kelly
-        nedkelly.setAttribute("animation-mixer", {clip: randomidles});
+        nedkelly.setAttribute("animation-mixer", {clip: "idleStill"});
 
-        // Checks if animation loop has ended for Ned Kelly
-        nedkelly.addEventListener('animation-loop', function () {
-
-            // If animation clip is one of the random idles in the array
-            if(nedkelly.getAttribute = nedkelly.getAttribute("animation-mixer", {clip: randomidles})) {
-                // Variable makes idles random
-                var randomidles = idles[Math.floor(Math.random() * idles.length)];
-
-                    // See what animation it is and reapply a random idle.
-                    nedkelly.removeAttribute("animation-mixer");
-                    nedkelly.setAttribute("animation-mixer", {clip: randomidles, crossFadeDuration: ".3", c});
-            }
-        });
 
         // Drowning Mechanic
         function drowning() {
@@ -88,20 +81,26 @@ AFRAME.registerComponent('nedkelly-logic', {
                 air.value++;
             }
         }
-
+        
+        // Delay for audio as animation is slow
+        var delay = 450;
+        
         // Code to crouch Ned Kelly
-
         function crouchingdown() {
-            killmulti++;
-            console.log(killmulti)
-            
+            killmulti++;  
             if (killmulti === 1) {
-                audio.play();
-                audio.loop = true;
-                 nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", loop: "once", clampWhenFinished: "true",});
+                nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", loop: "once", clampWhenFinished: "true"});
                 clearInterval(gainingairInterval)
                 losingairInterval = setInterval(drowning, 200)
                 death = false;
+                audio.play();
+                audio2.play();
+                audio.loop = true;
+                audio2.loop = true;
+//                setTimeout(function() {
+                    audio.volume = 0;
+                    audio2.volume = 0.2;
+//                }, delay);
             }
             
           
@@ -110,18 +109,33 @@ AFRAME.registerComponent('nedkelly-logic', {
         // Code to surface Ned Kelly
         function crouchingup() {
             killmulti--;
-            console.log(killmulti);
-            nedkelly.removeAttribute("animation-mixer");
-            nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", clampWhenFinished: "false",
-            timeScale: "-0.3"});
-            clearInterval(losingairInterval)
-            gainingairInterval = setInterval(gainingair, 400)
-            death = true;
+            if (killmulti < 1) {
+                audio.volume = 0.2;
+                audio2.volume = 0;
+                nedkelly.removeAttribute("animation-mixer");
+                nedkelly.setAttribute("animation-mixer", {clip: "idleStill", crossFadeDuration: ".4", loop:"repeat", clampWhenFinished: "true"});
+                clearInterval(losingairInterval)
+                gainingairInterval = setInterval(gainingair, 400)
+                death = true;
+//                setTimeout(function() {
+//                    if (audio.volume = 0) {
+//                            audio.volume = 0.2;
+//                            audio2.volume = 0;
+//                    }}, delay);
+            }
+            
+                            
+            if (audio2.volume == 0.2 && killmulti == 0){
+                    audio.volume = 0.2;
+                    audio2.volume = 0;
+            }
+
 
             // If kill case 1: If player goes up while Police is looking. If so, shoot player. This works in all instances UNLESS the player never ducked
 
             if (police.getAttribute("animation-mixer").clip === "idleAt"){
                  audio.pause();
+                 audio2.pause();
                  el.removeEventListener('pointerdown', crouchingdown);
                  el.removeEventListener('pointerup', crouchingup);
                  police.setAttribute("animation-mixer", {clip: "shootAt", crossFadeDuration: ".2", clampWhenFinished: "true", loop:"once"});
