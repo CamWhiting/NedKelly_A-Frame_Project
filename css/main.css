@@ -2,6 +2,16 @@
 CSS
 */
 
+.a-text {
+    z-index: 3;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin: 2em 0;
+    padding: 1em;
+}
+
+
 #score-bg {
  display: block;
   width: 1vw;
@@ -12,7 +22,7 @@ CSS
   position: fixed;
   top: -10px;
   left: 0;
-  z-index: 99998;
+  z-index: 1;
 }
 
 
@@ -39,7 +49,7 @@ CSS
 progress {
     background-color: #ddd;
     position: fixed;
-    z-index: 9999;
+    z-index: 1;
     transform-origin: top right;
     transform: rotate(-90deg);
     -moz-transform: rotate(-90deg);
@@ -47,5 +57,29 @@ progress {
     right: 5vh;
     margin: 10vh 0;
     width: 80vh;
- 
+}
+
+#question {
+    z-index: 3;
+    position: fixed;
+    opacity: 0;
+    transition: opacity 7s; 
+}
+
+#blackout {
+    background-color: black;
+    position: fixed;
+    background-color: black;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2;
+    opacity: 0;
+    pointer-events:none;
+    opacity: 0;
+    transition: opacity 7s; 
+}
+
+#eye {
+    width: 2vh;
+    z-index: 1;
 }

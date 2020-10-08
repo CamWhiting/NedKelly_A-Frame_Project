@@ -1,7 +1,4 @@
 // Custom code I use for my project
-
-
-
 // Component to Ned Kelly Logic
 AFRAME.registerComponent('nedkelly-logic', {
     init: function () {
@@ -11,7 +8,8 @@ AFRAME.registerComponent('nedkelly-logic', {
         var nedkelly = document.querySelector('#nedkelly')
         var scene = document.querySelector('a-scene')
         var cam = document.querySelector('#cam')
-        var score = document.querySelector("#score")
+        var score = document.querySelector('#score')
+        var blackOut = document.querySelector('#blackout')
         var interval;
 
         var totalScore = 0;
@@ -22,6 +20,13 @@ AFRAME.registerComponent('nedkelly-logic', {
         var audio2 = new Audio('./audio/folksey-mixkit-underwater.mp3')
         audio.volume = 0.2;
         audio2.volume = 0;
+        
+        
+        function Question() {
+           document.getElementById("question").style.opacity = 1;
+            return;
+        }
+  
         
         // The far more complicated version of parenting the camera to Ned Kelly's head. First calling the skinned mesh THEN the skeleton. This was hands down the hardest thing to implement. I not only needed to learn Javascript and Aframe but also the fundamentals of three.js.
         nedkelly.addEventListener('model-loaded', function(event){
@@ -47,6 +52,25 @@ AFRAME.registerComponent('nedkelly-logic', {
             return valString;
 
         }
+//        console.log(blackOut);
+        /////// GAME OVER CODE ///////        
+         function gameover(){
+             audio.pause();
+             audio2.pause();
+             el.removeEventListener('pointerdown', crouchingdown);
+             el.removeEventListener('pointerup', crouchingup);
+             police.setAttribute("animation-mixer", {clip: "shootAt", crossFadeDuration: ".2", clampWhenFinished: "true", loop:"once"});
+             nedkelly.removeAttribute("animation-mixer");
+             nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
+             clearInterval(interval);
+             document.getElementById("death").setAttribute("visible","true");
+             blackOut.style.opacity = 0.5;
+             setTimeout(Question,1000);
+             return;
+        }   
+
+        
+        
         
 
         /////// NED KELLY LOGIC ///////
@@ -62,12 +86,8 @@ AFRAME.registerComponent('nedkelly-logic', {
         // Drowning Mechanic
         function drowning() {
             if (air.value <= 0) {
-                audio.pause();
                 clearInterval(losingairInterval);
-                clearInterval(interval);
-                nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
-                el.removeEventListener('pointerdown', crouchingdown);
-                el.removeEventListener('pointerup', crouchingup);
+                gameover();
             } else {
                 air.value--;
             }
@@ -92,6 +112,7 @@ AFRAME.registerComponent('nedkelly-logic', {
                 nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", loop: "once", clampWhenFinished: "true"});
                 clearInterval(gainingairInterval)
                 losingairInterval = setInterval(drowning, 200)
+//                setInterval(blackOut, 200)
                 death = false;
                 audio.play();
                 audio2.play();
@@ -134,14 +155,7 @@ AFRAME.registerComponent('nedkelly-logic', {
             // If kill case 1: If player goes up while Police is looking. If so, shoot player. This works in all instances UNLESS the player never ducked
 
             if (police.getAttribute("animation-mixer").clip === "idleAt"){
-                 audio.pause();
-                 audio2.pause();
-                 el.removeEventListener('pointerdown', crouchingdown);
-                 el.removeEventListener('pointerup', crouchingup);
-                 police.setAttribute("animation-mixer", {clip: "shootAt", crossFadeDuration: ".2", clampWhenFinished: "true", loop:"once"});
-                 nedkelly.removeAttribute("animation-mixer");
-                 nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
-                 clearInterval(interval);
+                 gameover();
             }
 
         }
@@ -215,14 +229,7 @@ AFRAME.registerComponent('nedkelly-logic', {
             
             if (police.getAttribute("animation-mixer").clip === randomturning && death === true){
                 // If kill case 2: If player never ducked while Police is looking. If so, shoot player. This works ONLY when turn animation has ended            
-                    audio.pause();
-                    police.removeAttribute("animation-mixer");
-                    police.setAttribute("animation-mixer", {clip: "shootAt", crossFadeDuration: ".2", clampWhenFinished: "true", loop:"once"});
-                    el.removeEventListener('pointerdown', crouchingdown);
-                    el.removeEventListener('pointerup', crouchingup);
-                    nedkelly.removeAttribute("animation-mixer");
-                    nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
-                    clearInterval(interval);
+                    gameover();
              
             } else {
                 // play the next clip

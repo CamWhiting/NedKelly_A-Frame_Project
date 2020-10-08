@@ -42,29 +42,11 @@
                 look-controls="pointerLockEnabled: true" 
                 near="0.05"
                 >
-               
-                <a-entity position="0 0 -3"
-                geometry="primitive: ring; radiusInner: 0.2; radiusOuter: 0.3;"
-                material="color: black; shader: flat; opacity: 0.5"
-                cursor="fuse: true"
-                animation="startEvents: fusing; property: scale; dur: 1500; from: 0.25 0.25 0.25; to: 0.1 0.1 0.1;"
-                animation__2="property: scale; dur: 150; from: 0.1 0.1 0.1; to: 0.25 0.25 0.25;" >
-                </a-entity>
+                    <a-cursor fuse="true" fuse-timeout="1500">
+                    </a-cursor>
                 
-                <!-- All internal dialogue -->          
-                    <a-entity id="waterText" 
-                    class="a-text" 
-                    text="align: center;
-                          value: Thank god for the murky waters of Stringybark Creek. Without it I would have been had for sure!;
-                          color: white;
-                          wrap-count: 35"
-                    position= "0 -0.07 -0.1"
-                    geometry="primitive: plane; width: auto; height: auto"
-                    material="color: #000;"
-                    scale="0.085 0.085 0"></a-entity>
-                
-                
-                
+                <!-- All internal dialogue -->
+                    <a-text id="waterText" class="a-text" align="center" value="Thank god for the murky waters of Stringybark Creek. Without it I would have been had for sure!" color="white" height="0.1" width="0.1" visible="false" position="0 -0.07 -0.1"></a-text>
                 
                     <a-text id="death" class="a-text" align="center" value="Agh! Such is life..." color="white" height="0.1" width="0.1" visible="false" position="0 -0.07 -0.1"></a-text>
                 
@@ -75,27 +57,21 @@
                             text="align: center;
                                   value: Constable Strahan. You'll 'gun us down like dogs', eh? Just you wait...  soon the world will see how corrupt you really are.;
                                   color: white;
+                                  visible: false;
                                   wrap-count: 35"
-                            visible="false"
                             position= "0 -0.07 -0.1"
                             geometry="primitive: plane; width: auto; height: auto"
                             material="color: #000;"
                             scale="0.085 0.085 0"></a-entity>
                 
-
+<!--
+                   <a-entity  class="a-text" >
+                        <p id="policeText" visible="false">Constable Strahan. You'll 'gun us down like dogs', eh? Just you wait... soon the world will see how corrupt you really are.</p>
+                    </a-entity>
+-->
                 
-                 <a-entity  id="backgroundText" 
-                            class="a-text" 
-                            text="align: center;
-                                  value: We've got to get out of Wombat Ranges, the police are onto us.;
-                                  color: white;
-                                  wrap-count: 35"
-    
-                            position= "0 -0.07 -0.1"
-                            geometry="primitive: plane; width: auto; height: auto"
-                            material="color: #000;"
-                            scale="0.085 0.085 0"></a-entity>
-
+                
+                    <a-text id="backgroundText" class="a-text" align="center" value="We've got to get out of Wombat Ranges, the police are onto us." color="white" height="0.1" width="0.1" visible="false" position="0 -0.07 -0.1"></a-text>
                 
                 
             </a-camera>
@@ -149,8 +125,8 @@
         </a-light>
         <a-sky  
                 color= "#22251e";
-                event-set__enter="_event: mouseenter; _target: #backgroundText; visible: true;"
-                event-set__leave="_event: mouseleave; _target: #backgroundText; visible: false;"
+                event-set__enter="_event: mouseenter; _target: #backgroundText; visible: true"
+                event-set__leave="_event: mouseleave;  _target: #backgroundText; visible: false"
                >
         </a-sky>
 
@@ -172,9 +148,8 @@
     
         <!-- Plane used for policeman dialogue. As the character's hit box exported with errors -->
         <a-plane id="policecollider" scale="0.87781 1.83953 1" rotation="0 -14.805802383975601 0" position="-0.56218 0.60496 0.51596" visible="false" 
-        event-set__enter="_event: mouseenter; _target: #policeText; visible: true;"
-        event-set__leave="_event: mouseleave;  _target: #policeText; visible: false;">
-        </a-plane>
+        event-set__enter="_event: mouseenter; _target: #policeText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #policeText; visible: false"></a-plane>
         
         
         <!-- Environment -->
@@ -194,8 +169,8 @@
         </a-entity>
 
         <a-entity id="water" position="-0.10498 -0.04658 0" scale="5.5 5.5 5.5" rotation="0 90 0" gltf-model="#water-gtlf" animation-mixer
-        event-set__enter="_event: mouseenter; _target: #waterText; visible: true; "
-        event-set__leave="_event: mouseleave;  _target: #waterText; visible: false;">
+        event-set__enter="_event: mouseenter; _target: #waterText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #waterText; visible: false">
         </a-entity>
         
       
