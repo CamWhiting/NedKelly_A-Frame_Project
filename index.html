@@ -19,8 +19,23 @@
     </head>
     
     <body>       
+    
+    <!-- Dying/Blacking Out -->  
+    <div id="blackout">
+        <div id="question">
+            <p>You have died. But who even are you? Did you figure it out? Write your answer below:
+            </p>
+            <input id="answerValue"> 
+            <button type="button" onclick="answer()">Submit</button>
+            <p id="answer"></p>
+            <p>If you give up, you can see the correct answer here: <a href="https://en.wikipedia.org/wiki/Ned_Kelly">ANSWER</a></p>
+        </div>
+    </div>  
+               
+        
     <!-- stats -->
     <a-scene 
+        id="theAnswer"     
         nedkelly-logic
         rain="splash: false" 
         renderer="alpha: false;"  
@@ -35,36 +50,27 @@
           rotation="32.00886018277858 -160.30786149965303 2.7118092443541864"
           >
             
-            <a-camera    
+            <a-camera   
+                id="a_cam"      
                 position="-1.58721 32.62425 -9.63607" 
                 user-height="2.6" 
                 wasd-controls-enabled="true" 
                 look-controls="pointerLockEnabled: true" 
                 near="0.05"
+                scale="100 100 100"      
                 >
-               
-                <a-entity position="0 0 -3"
-                geometry="primitive: ring; radiusInner: 0.2; radiusOuter: 0.3;"
+            <a-entity 
+                id="cursor"      
+                position="0 0 -0.1"      
+                scale="0.001 0.001 0.001"
+                geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.02;"
                 material="color: black; shader: flat; opacity: 0.5"
                 cursor="fuse: true"
-                animation="startEvents: fusing; property: scale; dur: 1500; from: 0.25 0.25 0.25; to: 0.1 0.1 0.1;"
-                animation__2="property: scale; dur: 150; from: 0.1 0.1 0.1; to: 0.25 0.25 0.25;" >
+                animation="startEvents: fusing; property: scale; dur: 1500; from: 0.25 0.25 0.25; to: 0.1 0.1 0.1; easing: easeInOutQuad;">
                 </a-entity>
                 
-                <!-- All internal dialogue -->          
-                    <a-entity id="waterText" 
-                    class="a-text" 
-                    text="align: center;
-                          value: Thank god for the murky waters of Stringybark Creek. Without it I would have been had for sure!;
-                          color: white;
-                          wrap-count: 35"
-                    position= "0 -0.07 -0.1"
-                    geometry="primitive: plane; width: auto; height: auto"
-                    material="color: #000;"
-                    scale="0.085 0.085 0"></a-entity>
-                
-                
-                
+                <!-- All internal dialogue -->
+                    <a-text id="waterText" class="a-text" align="center" value="Thank god for the murky waters of Stringybark Creek. Without it I would have been had for sure!" color="white" height="0.1" width="0.1" visible="false" position="0 -0.07 -0.1"></a-text>
                 
                     <a-text id="death" class="a-text" align="center" value="Agh! Such is life..." color="white" height="0.1" width="0.1" visible="false" position="0 -0.07 -0.1"></a-text>
                 
@@ -75,41 +81,51 @@
                             text="align: center;
                                   value: Constable Strahan. You'll 'gun us down like dogs', eh? Just you wait...  soon the world will see how corrupt you really are.;
                                   color: white;
+                                  visible: false;
                                   wrap-count: 35"
-                            visible="false"
                             position= "0 -0.07 -0.1"
-                            geometry="primitive: plane; width: auto; height: auto"
+                            geometry="primitive: plane; width: auto; height: 0.158"
                             material="color: #000;"
-                            scale="0.085 0.085 0"></a-entity>
-                
-
-                
-                 <a-entity  id="backgroundText" 
+                            scale="0.085 0.085 0">
+                    </a-entity>
+                  
+         
+                            
+                    <a-entity id="kellyText" 
+                            visible="false" 
                             class="a-text" 
                             text="align: center;
+                                  value: Look at me. Soaked, cold and an outlaw. I wonder what my father would think of me if he were alive;
+                                  color: white;
+                                  visible: false;
+                                  wrap-count: 35"
+                            position= "0 -0.07 -0.1"
+                            geometry="primitive: plane; width: auto; height: auto;"
+                            material="color: #000;"
+                            scale="0.085 0.085 0">
+                    </a-entity>
+         
+                   <a-entity id="backgroundText" 
+                             class="a-text" 
+                             text="align: center;
                                   value: We've got to get out of Wombat Ranges, the police are onto us.;
                                   color: white;
+                                  visible: false;
                                   wrap-count: 35"
-    
-                            position= "0 -0.07 -0.1"
+                             position= "0 -0.07 -0.1"
                             geometry="primitive: plane; width: auto; height: auto"
                             material="color: #000;"
                             scale="0.085 0.085 0"></a-entity>
-
                 
                 
             </a-camera>
          </a-entity>
             
-            <!-- Dying/Blacking Out -->
             
-            <div id="blackout">
-                <p id="question" class="a-text">You have died. But who even are you?
-                </p>
-            </div>
         
             <!-- Air Gauge -->
-            <progress id="air" max="100" value="100"></progress>
+        <p id="airSymbol">O₂</p>
+        <progress id="air" max="100" value="100"><p><strong>O</strong></p></progress>
 
             <!-- Score -->
             <div id="score-bg">
@@ -130,7 +146,7 @@
 
             <a-asset-item id="reed-gtlf" src="models/reed.glb" response-type="arraybuffer"></a-asset-item>
 
-            <a-asset-item id="water-gtlf" src="models/water.glb" response-stype="arraybuffer"></a-asset-item>
+            <a-asset-item id="water-gtlf" src="models/water2.glb" response-stype="arraybuffer"></a-asset-item>
 
         </a-assets>
 
@@ -149,14 +165,19 @@
         </a-light>
         <a-sky  
                 color= "#22251e";
-                event-set__enter="_event: mouseenter; _target: #backgroundText; visible: true;"
-                event-set__leave="_event: mouseleave; _target: #backgroundText; visible: false;"
+                event-set__enter="_event: mouseenter; _target: #backgroundText; visible: true"
+                event-set__leave="_event: mouseleave;  _target: #backgroundText; visible: false"
                >
         </a-sky>
 
         <!-- Models -->
         <a-entity id="nedkelly" gltf-model="#nedkelly-gtlf" rotation="0 -180 0" position="-1.353 -1.623 4" scale="0.01 0.01 0.01" animation-mixer>
         </a-entity>
+        
+        <!-- Plane used for Ned Kelly dialogue. As camera is parented to mesh, if the text were added to Ned Kelly mesh, it would display constantly.-->
+         <a-plane id="nedcollider" position="-1.38981 -1.5764 4.12062" rotation= "-90 0 0" scale="1.25305 1.88219 1"   visible="false" 
+        event-set__enter="_event: mouseenter; _target: #kellyText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #kellyText; visible: false"></a-plane>
         
         <!-- Police Mesh -->
          <a-entity 
@@ -172,9 +193,8 @@
     
         <!-- Plane used for policeman dialogue. As the character's hit box exported with errors -->
         <a-plane id="policecollider" scale="0.87781 1.83953 1" rotation="0 -14.805802383975601 0" position="-0.56218 0.60496 0.51596" visible="false" 
-        event-set__enter="_event: mouseenter; _target: #policeText; visible: true;"
-        event-set__leave="_event: mouseleave;  _target: #policeText; visible: false;">
-        </a-plane>
+        event-set__enter="_event: mouseenter; _target: #policeText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #policeText; visible:  false"></a-plane>
         
         
         <!-- Environment -->
@@ -194,8 +214,8 @@
         </a-entity>
 
         <a-entity id="water" position="-0.10498 -0.04658 0" scale="5.5 5.5 5.5" rotation="0 90 0" gltf-model="#water-gtlf" animation-mixer
-        event-set__enter="_event: mouseenter; _target: #waterText; visible: true; "
-        event-set__leave="_event: mouseleave;  _target: #waterText; visible: false;">
+        event-set__enter="_event: mouseenter; _target: #waterText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #waterText; visible: false">
         </a-entity>
         
       

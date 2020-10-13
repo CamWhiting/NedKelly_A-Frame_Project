@@ -1,4 +1,21 @@
 // Custom code I use for my project
+ /////// ANSWER /////// 
+ // (separated as when game ends, all other JS is deleted!) 
+    function answer() {
+        var answers = ['Ned Kelly', 'ned kelly', 'Ned kelly', 'ned Kelly', 'Kelly', 'kelly', 'Ned', "ned", 'NedKelly', "nedkelly"];
+        var answerValue = document.getElementById("answerValue").value;
+        var answerCheck = answers.includes(answerValue);
+
+        // If x is Not a Number or less than one or greater than 10
+        if (answerCheck) {
+        text = "Congratulations! Ned Kelly is the correct answer. To find out more about his life, click on the 'ANSWER' link above. Thank you for playing.";      
+        } else {
+            text = "Sorry, that is not the correct answer. Please refresh the page and try again!";
+        }
+      document.getElementById("answer").innerHTML = text;
+    }
+
+
 // Component to Ned Kelly Logic
 AFRAME.registerComponent('nedkelly-logic', {
     init: function () {
@@ -8,10 +25,12 @@ AFRAME.registerComponent('nedkelly-logic', {
         var nedkelly = document.querySelector('#nedkelly')
         var scene = document.querySelector('a-scene')
         var cam = document.querySelector('#cam')
-        var score = document.querySelector('#score')
         var blackOut = document.querySelector('#blackout')
+        var score = document.querySelector('#score')
+        
+        var question = document.getElementById("question");
+        
         var interval;
-
         var totalScore = 0;
         
         var death = true;
@@ -23,7 +42,13 @@ AFRAME.registerComponent('nedkelly-logic', {
         
         
         function Question() {
-           document.getElementById("question").style.opacity = 1;
+           question.style.opacity = 1;
+            return;
+        }
+        
+        function sceneRemove() {
+            blackOut.style.pointerEvents="all";
+            scene.remove();
             return;
         }
   
@@ -63,9 +88,14 @@ AFRAME.registerComponent('nedkelly-logic', {
              nedkelly.removeAttribute("animation-mixer");
              nedkelly.setAttribute("animation-mixer", {clip: "dying", crossFadeDuration: ".2", loop:"once", clampWhenFinished: "true"});
              clearInterval(interval);
+             var text = document.createTextNode('You survived for: ' + totalScore + ' seconds.');
+             question.appendChild(text);
              document.getElementById("death").setAttribute("visible","true");
-             blackOut.style.opacity = 0.5;
+             document.getElementById("a_cam").setAttribute("look-controls","pointerLockEnabled: false");
+             blackOut.style.opacity = 1;
              setTimeout(Question,1000);
+             setTimeout(sceneRemove,6000);
+             
              return;
         }   
 
@@ -112,16 +142,13 @@ AFRAME.registerComponent('nedkelly-logic', {
                 nedkelly.setAttribute("animation-mixer", {clip: "crouchDown", crossFadeDuration: ".2", loop: "once", clampWhenFinished: "true"});
                 clearInterval(gainingairInterval)
                 losingairInterval = setInterval(drowning, 200)
-//                setInterval(blackOut, 200)
                 death = false;
                 audio.play();
                 audio2.play();
                 audio.loop = true;
                 audio2.loop = true;
-//                setTimeout(function() {
-                    audio.volume = 0;
-                    audio2.volume = 0.2;
-//                }, delay);
+                audio.volume = 0;
+                audio2.volume = 0.2;
             }
             
           
@@ -138,11 +165,6 @@ AFRAME.registerComponent('nedkelly-logic', {
                 clearInterval(losingairInterval)
                 gainingairInterval = setInterval(gainingair, 400)
                 death = true;
-//                setTimeout(function() {
-//                    if (audio.volume = 0) {
-//                            audio.volume = 0.2;
-//                            audio2.volume = 0;
-//                    }}, delay);
             }
             
                             
@@ -173,6 +195,9 @@ AFRAME.registerComponent('nedkelly-logic', {
         var idlespolice = ["idleLooking", "idleMoving", "idle"];
         var randomidlespolice = "idle";
         var shoot = "shootAt"
+        
+        // Speed variable increases difficulty overtime
+        var speed = 1;
 
         var randomturning = "turningLeft";
         var turning = ["turningLeft", "turningRight"]
@@ -221,6 +246,7 @@ AFRAME.registerComponent('nedkelly-logic', {
                 clipId = 0;
                 counter = 1; // the animation will be played once within this callback
                 countertrigger = randomIntFromInterval(1,3);
+                speed+=0.2
             } else {
                 clipId++
             }
@@ -233,11 +259,11 @@ AFRAME.registerComponent('nedkelly-logic', {
              
             } else {
                 // play the next clip
-                police.setAttribute("animation-mixer", {clip: animations[clipId],  crossFadeDuration: ".2"});
+                police.setAttribute("animation-mixer", {clip: animations[clipId],  crossFadeDuration: ".2", timeScale: speed});
+                console.log(speed);
             }
 
         });
-
         
     }
 });
