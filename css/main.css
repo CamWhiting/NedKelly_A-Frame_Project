@@ -2,16 +2,6 @@
 CSS
 */
 
-.a-text {
-    z-index: 3;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    margin: 2em 0;
-    padding: 1em;
-}
-
-
 #score-bg {
  display: block;
   width: 1vw;
@@ -80,7 +70,7 @@ progress { color: #ddd; }
     transition: opacity 7s; 
     text-align: center;
     color: white;
-    top: 45%;
+    top: 40%;
     font-family: arial;
     padding: 0;
     margin: 0;
