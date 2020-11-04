@@ -8,7 +8,7 @@ Ned Kelly Project is a small proof of concept highlighting game design technique
 ![Image of Ned Kelly Game](img/Example1.JPG)
 
 ## Example
-* [Working Example](https://nedkelly.cwlab.club) - Be warned, the scene takes a long time to load 
+* [Working Example](https://theunnamedgame.cwlab.club) - Be warned, the scene takes a long time to load 
 
 ## Built With
 * [A-Frame](https://aframe.io/) - Providing a more intuitive framework for WebGl
