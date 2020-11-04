@@ -15,6 +15,17 @@ CSS
   z-index: 1;
 }
 
+#answerValue {
+    width: 45vw;
+    height: 3vh;
+    margin: 0 0 1.5em 0;
+}
+
+button {
+    font-size: 1em;
+    padding: 0.5em;
+    margin: 0 0.5em;
+}
 
 #score-bg strong {
     position: absolute;
@@ -70,7 +81,7 @@ progress { color: #ddd; }
     transition: opacity 7s; 
     text-align: center;
     color: white;
-    top: 40%;
+    top: 34%;
     font-family: arial;
     padding: 0;
     margin: 0;

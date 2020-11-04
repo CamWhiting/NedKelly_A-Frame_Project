@@ -5,7 +5,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Ned Kelly Experiment</title>
+        <title>The Unnamed Game</title>
         
         <!-- A-Frame library + Effects -->
         <script src="js/A-Frame/aframe.min.js"></script>
@@ -23,12 +23,12 @@
     <!-- Dying/Blacking Out -->  
     <div id="blackout">
         <div id="question">
-            <h1 id="highscore">You have died. </h1> <p>But who even are you? Did you figure it out? Write your answer below:
+            <h1 id="highscore">You have died. </h1><br> <p>But who even are you? Did you figure it out? Write your answer below:
             </p>
-            <input id="answerValue"> 
-            <button type="button" onclick="answer()">Submit</button>
-            <p id="answer"></p>
-            <p>If you give up, you can see the correct answer here: <a href="https://en.wikipedia.org/wiki/Ned_Kelly">ANSWER</a></p>
+            <input id="answerValue" placeholder="Who are you?"><br>
+            <button type="button" onclick="answer()">Submit</button> <button onClick="window.location.reload();">Retry</button>
+            <p id="answer"></p><br>
+            <h5>If you give up, you can see the correct answer here: <a href="https://en.wikipedia.org/wiki/Ned_Kelly">ANSWER</a></h5>
         </div>
     </div>  
                
@@ -76,9 +76,9 @@
                             class="a-text" 
                             visible="false"
                             text="                                  value: 
-                                  Goal: Try to hide in the water to avoid being seen while not running out of air (O2 on left).
+                                  Goal: Try to hide in the water to avoid being seen while not running out of air (O2 on right).
                                   
-                                  Score as high as you can (score in top right)!
+                                  Score as high as you can (score in top left)!
                                   
                                   Controls:
                                   > Click - to duck/hide.
@@ -90,7 +90,7 @@
                                   visible: false;
                                   wrap-count: 35"
                             position= "0 -0.045 -0.1"
-                            geometry="primitive: plane; width: auto; height: 0.65"
+                            geometry="primitive: plane; width: auto; height: 0.75"
                             material="color: #000;"
                             scale="0.085 0.085 0"> </a-entity>
                 
@@ -179,6 +179,34 @@
                             scale="0.085 0.085 0">
                     </a-entity>
                 
+                    <a-entity id="fishText" 
+                             visible="false"
+                             class="a-text" 
+                             text="align: center;
+                                  value: Murry Cod, native to the area.;
+                                  color: white;
+                                  visible: false;
+                                  wrap-count: 35"
+                             position= "0 -0.07 -0.1"
+                            geometry="primitive: plane; width: auto; height:  0.158"
+                            material="color: #000;"
+                            scale="0.085 0.085 0">
+                    </a-entity>
+                
+                    <a-entity id="scarfText" 
+                             visible="false"
+                             class="a-text" 
+                             text="align: center;
+                                  value: My sash! My flashy reward for saving my classmate from drowning in Hughes Creek.;
+                                  color: white;
+                                  visible: false;
+                                  wrap-count: 35"
+                             position= "0 -0.07 -0.1"
+                            geometry="primitive: plane; width: auto; height:  0.158"
+                            material="color: #000;"
+                            scale="0.085 0.085 0">
+                    </a-entity>
+                
             </a-camera>
          </a-entity>
             
@@ -212,6 +240,12 @@
             <a-asset-item id="water-gtlf" src="models/water.glb" response-stype="arraybuffer"></a-asset-item>
             
             <a-asset-item id="helmet-gtlf" src="models/helmet.glb" response-stype="arraybuffer"></a-asset-item>
+            
+            <a-asset-item id="fish-gtlf" src="models/fish.glb" response-stype="arraybuffer"></a-asset-item>
+            
+            <a-asset-item id="scarf-gtlf" src="models/scarf.glb" response-stype="arraybuffer"></a-asset-item>
+            
+            <a-asset-item id="gun-gtlf" src="models/gun.glb" response-stype="arraybuffer"></a-asset-item>
 
         </a-assets>
 
@@ -262,9 +296,9 @@
         </a-entity>
         
         <!-- Plane used for Ned Kelly dialogue. As camera is parented to mesh, if the text were added to Ned Kelly mesh, it would display constantly.-->
-         <a-plane id="nedcollider" class="trigger" position="-1.38981 -1.5764 4.12062" rotation= "-90 0 0" scale="1.25305 1.88219 1"   visible="false" 
+         <a-circle id="nedcollider" class="trigger" position="-1.38981  10.12062" rotation= "-90 0 0" scale="45 45 45" visible="false" 
         event-set__enter="_event: click; _target: #kellyText; visible: true"
-        event-set__leave="_event: mouseleave;  _target: #kellyText; visible: false"></a-plane>
+        event-set__leave="_event: mouseleave;  _target: #kellyText; visible: false"></a-circle>
         
         <!-- Police Mesh -->
          <a-entity 
@@ -293,10 +327,10 @@
             <a-entity id="reed-2" rotation="0 0 -15.05446606706238" scale="0.13941 0.13941 0.13941" position="-3.49988 -0.54034 2.61724" gltf-model="#reed-gtlf">
             </a-entity>
 
-            <a-entity id="reed-3" scale="0.13941 0.26012 0.13941" rotation="-7.426678940485732 8.703228908037206 11.924397632262693" position="0.75318 -0.93402 2.09461" gltf-model="#reed-gtlf">
+            <a-entity id="reed-3" scale="0.13941 0.26012 0.13941" rotation="-7.426678940485732 8.703228908037206 11.924397632262693" position="0.51318 -0.91402 2.09461" gltf-model="#reed-gtlf">
             </a-entity>
 
-            <a-entity id="reed-4" scale="0.13941 0.27371 0.13941" rotation="0 -171.6690416193021 0" position="0.5005 -0.71469 1.64121" gltf-model="#reed-gtlf">
+            <a-entity id="reed-4" scale="0.13941 0.27371 0.13941" rotation="0 -171.6690416193021 0" position="0.3664 -0.71469 1.69763" gltf-model="#reed-gtlf">
             </a-entity>
 
         <a-entity id="lilypad" position="-0.2477 0.01656 0" scale="5.5 5.5 5.5" rotation="0 90 0" gltf-model="#lilypad-gtlf" animation-mixer="loop:repeat">
@@ -307,9 +341,23 @@
         event-set__leave="_event: mouseleave;  _target: #waterText; visible: false">
         </a-entity>
         
-        <a-entity id="helmet" class="trigger" rotation="0 90 0" scale="5.5 5.5 5.5" gltf-model="#helmet-gtlf" visibile="false"
+        <a-entity id="helmet" class="trigger" rotation="0 90 0" scale="5.5 5.5 5.5" gltf-model="#helmet-gtlf" visible="false" shadow="cast: true"
         event-set__enter="_event: click; _target: #helmetText; visible: true"
         event-set__leave="_event: mouseleave;  _target: #helmetText; visible: false">
+        </a-entity>
+        
+        <a-entity id="fish" class="trigger" rotation="0 90 0" scale="5.5 5.5 5.5" gltf-model="#fish-gtlf" animation-mixer shadow="cast: true" event-set__enter="_event: click; _target: #fishText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #fishText; visible: false">
+        </a-entity>
+        
+        <a-plane id="scarfcollider" scale="1.27785 1.18068 1.45572" rotation="0 -14.805802383975601 0" position="1.22316 1.44572 -1.25125" visible="false" 
+        event-set__enter="_event: click; _target: #scarfText; visible: true"
+        event-set__leave="_event: mouseleave;  _target: #scarfText; visible: false"></a-plane>
+        
+        <a-entity id="scarf" rotation="0 90 0" scale="5.5 5.5 5.5" gltf-model="#scarf-gtlf" visible="false" shadow="cast: true" >
+        </a-entity>
+        
+        <a-entity id="gun" position="-0.2931 -1.54691 3.49407" rotation="1.1562288305740014 -124.25735703002162 76.25667182734665" scale="5.5 5.5 5.5" gltf-model="#gun-gtlf" shadow="cast: true" >
         </a-entity>
         
     </a-scene>

@@ -32,15 +32,26 @@ AFRAME.registerComponent('nedkelly-logic', {
         
         var scene = document.querySelector('a-scene');
         var cam = document.querySelector('#cam');
+        var nedcollider = document.querySelector('#nedcollider');
         var blackOut = document.querySelector('#blackout');
         var score = document.querySelector('#score');
+        
+        // Hints
         var helmet =  document.querySelector('#helmet');
+        var scarf = document.querySelector('#scarf');
+        var scarfcollider = document.querySelector('#scarfcollider');
       
+        //audio
+        var audio = new Audio('./audio/folksey-mixkit.mp3');
+        var audio2 = new Audio('./audio/folksey-mixkit-underwater.mp3');
+        var audio3 = new Audio('./audio/gunshot.mp3');
+        
         // Messages 
         var trigger = document.querySelectorAll(".trigger");
         var adeath = document.querySelector('#death');
         var highscore = document.querySelector("#highscore");
         
+        // Scpre
         var interval;
         var totalScore = 0;
         
@@ -51,6 +62,7 @@ AFRAME.registerComponent('nedkelly-logic', {
             const model = event.detail.model;
             const skinnedMesh = model.getObjectByName('nedKelly001');
             skinnedMesh.skeleton.bones[2].add(cam.object3D);
+            skinnedMesh.skeleton.bones[2].add(nedcollider.object3D);
         });
         
         // Method to stop multi-touch affecting up the breathing mechanic 
@@ -62,10 +74,6 @@ AFRAME.registerComponent('nedkelly-logic', {
         function startGame() {
             document.querySelectorAll(".menu").forEach(e => e.parentNode.removeChild(e));
             trigger.forEach(e => e.classList.add("clickable"));
-            var audio = new Audio('./audio/folksey-mixkit.mp3')
-            var audio2 = new Audio('./audio/folksey-mixkit-underwater.mp3')
-            audio.volume = 0.2;
-            audio2.volume = 0;
             death = true;
 
             function Question() {
@@ -83,7 +91,19 @@ AFRAME.registerComponent('nedkelly-logic', {
             /////// HIGH SCORE ///////
             interval = setInterval(setTime, 1000);
             
+
+
             function hints(){
+                if (totalScore == 50) {
+                    scarf.setAttribute('visible', true);
+                    scarf.setAttribute("animation-mixer", {clip: "fall", loop:"once"});
+                    scarfcollider.classList.add("clickable");
+                }
+                
+                scarf.addEventListener('animation-finished', function() {
+                   scarf.setAttribute("animation-mixer", {clip: "sway", loop:"repeat"})
+                });
+                
                 if (totalScore == 100) {
                     helmet.setAttribute('visible', true);
                     helmet.setAttribute("animation-mixer", {clampWhenFinished: "true", loop:"once"});
@@ -127,10 +147,6 @@ AFRAME.registerComponent('nedkelly-logic', {
                  setTimeout(sceneRemove,6000);
                  return;
             }   
-
-
-
-
 
             /////// NED KELLY LOGIC ///////
 
@@ -234,7 +250,7 @@ AFRAME.registerComponent('nedkelly-logic', {
             police.setAttribute("animation-mixer", {clip: randomidlespolice});
 
             // animation helpers - Simplifies the Policeman's turning logic
-            var animations = [randomidlespolice, randomturning, "idleAt"];
+            var animations = [randomidlespolice, randomturning, "idleAt" ];
             var clipId = 0;
 
             // Idle counter (to determine when to turn around)
@@ -281,6 +297,8 @@ AFRAME.registerComponent('nedkelly-logic', {
                 if (police.getAttribute("animation-mixer").clip === randomturning && death === true){
                     // If kill case 2: If player never ducked while Police is looking. If so, shoot player. This works ONLY when turn animation has ended            
                         gameover();
+                        audio3.volume = 0.6;
+                        audio3.play();
 
                 } else {
                     // play the next clip
